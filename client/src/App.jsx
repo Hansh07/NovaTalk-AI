@@ -16,6 +16,8 @@ import ChatPage from './pages/ChatPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import ModerationPage from './pages/ModerationPage';
 
+import HomePage from './pages/HomePage';
+
 // Layout
 import MainLayout from './components/layout/MainLayout';
 
@@ -45,17 +47,17 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
 const AppContent = () => {
   return (
     <Routes>
+      <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       
-      <Route path="/" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
-        <Route index element={<Navigate to="/chat" replace />} />
-        <Route path="chat" element={<ChatPage />} />
-        <Route path="analytics" element={<AnalyticsPage />} />
-        <Route path="moderation" element={<ProtectedRoute requireAdmin><ModerationPage /></ProtectedRoute>} />
+      <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/moderation" element={<ProtectedRoute requireAdmin><ModerationPage /></ProtectedRoute>} />
       </Route>
 
-      <Route path="*" element={<Navigate to="/chat" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

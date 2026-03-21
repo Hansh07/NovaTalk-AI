@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
-import { HiOutlineUser, HiOutlineMail, HiOutlineLockClosed, HiOutlineSparkles } from 'react-icons/hi';
+import { HiOutlineUser, HiOutlineMail, HiOutlineLockClosed } from 'react-icons/hi';
+import NovaLogo from '../components/ui/NovaLogo';
 import toast from 'react-hot-toast';
 
 const RegisterPage = () => {
@@ -23,9 +24,9 @@ const RegisterPage = () => {
     try {
       await register(name, email, password);
       toast.success('Account created successfully!');
-      navigate('/', { replace: true });
+      navigate('/chat', { replace: true });
     } catch (err) {
-      // Show specific server error if available
+      // Show error from backend or fallback message
       const errorMessage = err.response?.data?.error || err.response?.data?.message || err.message || 'Registration failed';
       setAuthError(errorMessage);
     } finally {
@@ -37,7 +38,7 @@ const RegisterPage = () => {
     try {
       setLoading(true);
       await googleLogin(credentialResponse.credential);
-      navigate('/', { replace: true });
+      navigate('/chat', { replace: true });
     } catch (err) {
       const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Google authentication failed';
       setAuthError(errorMessage);
@@ -66,14 +67,9 @@ const RegisterPage = () => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring' }}
-              style={{
-                width: 64, height: 64, borderRadius: 16,
-                background: 'linear-gradient(135deg, #00d4ff, #a855f7)',
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                marginBottom: 16,
-              }}
+              style={{ display: 'inline-block', marginBottom: 16 }}
             >
-              <HiOutlineSparkles size={32} color="white" />
+              <NovaLogo className="w-16 h-16 drop-shadow-lg" />
             </div>
             <h1 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: 4 }}>
               Join <span className="gradient-text">NovaTalk</span>
@@ -107,13 +103,13 @@ const RegisterPage = () => {
             )}
 
             <button
-                type="submit"
-                disabled={loading}
-                className={`btn-primary ${loading ? 'opacity-70 cursor-not-allowed' : 'glass-hover'}`}
-                style={{ width: '100%', padding: '12px', marginTop: '8px' }}
-              >
-                {loading ? 'Creating Account...' : 'Create Account'}
-              </button>
+              type="submit"
+              disabled={loading}
+              className={`neon-btn ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+              style={{ width: '100%', padding: '14px 28px', marginTop: '8px' }}
+            >
+              {loading ? 'Creating Account...' : 'Create Account'}
+            </button>
           </form>
 
           <div style={{ display: 'flex', alignItems: 'center', margin: '24px 0', opacity: 0.6 }}>

@@ -4,7 +4,8 @@ import { NavLink } from 'react-router-dom';
 import { useChat } from '../../context/ChatContext';
 import { useAuth } from '../../context/AuthContext';
 import { useSocket } from '../../context/SocketContext';
-import { HiOutlineChatAlt2, HiOutlineChartSquareBar, HiOutlineShieldCheck, HiOutlinePlus, HiOutlineSearch } from 'react-icons/hi';
+import { HiOutlineChatAlt2, HiOutlineChartSquareBar, HiOutlineShieldCheck, HiOutlineSearch } from 'react-icons/hi';
+import NovaLogo from '../ui/NovaLogo';
 import api from '../../api';
 import toast from 'react-hot-toast';
 
@@ -76,7 +77,10 @@ const Sidebar = () => {
     <div className="sidebar" style={{ display: 'flex', flexDirection: 'column' }}>
       {/* Search Header */}
       <div style={{ padding: '20px' }}>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: 16 }}>Chats</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+          <NovaLogo className="w-8 h-8 drop-shadow-sm" />
+          <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', tracking: 'tight' }}>NovaTalk</span>
+        </div>
         <div style={{ position: 'relative' }}>
           <HiOutlineSearch style={{ position: 'absolute', left: 12, top: 12, color: 'var(--text-muted)' }} />
           <input

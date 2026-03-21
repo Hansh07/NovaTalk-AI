@@ -4,7 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
-import { HiOutlineMail, HiOutlineLockClosed, HiOutlineSparkles } from 'react-icons/hi';
+import { HiOutlineMail, HiOutlineLockClosed } from 'react-icons/hi';
+import NovaLogo from '../components/ui/NovaLogo';
 import toast from 'react-hot-toast';
 
 const LoginPage = () => {
@@ -22,7 +23,7 @@ const LoginPage = () => {
     try {
       await login(email, password);
       toast.success('Welcome back!');
-      navigate('/', { replace: true });
+      navigate('/chat', { replace: true });
     } catch (err) {
       // Show error from backend or fallback message
       const errorMessage = err.response?.data?.error || err.response?.data?.message || err.message || 'Login failed';
@@ -36,7 +37,7 @@ const LoginPage = () => {
     try {
       setLoading(true);
       await googleLogin(credentialResponse.credential);
-      navigate('/', { replace: true });
+      navigate('/chat', { replace: true });
     } catch (err) {
       const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Google authentication failed';
       setAuthError(errorMessage);
@@ -67,14 +68,9 @@ const LoginPage = () => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring' }}
-              style={{
-                width: 64, height: 64, borderRadius: 16,
-                background: 'linear-gradient(135deg, #00d4ff, #a855f7)',
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                marginBottom: 16,
-              }}
+              style={{ display: 'inline-block', marginBottom: 16 }}
             >
-              <HiOutlineSparkles size={32} color="white" />
+              <NovaLogo className="w-16 h-16 drop-shadow-lg" />
             </motion.div>
             <h1 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: 4 }}>
               <span className="gradient-text">NovaTalk</span>
