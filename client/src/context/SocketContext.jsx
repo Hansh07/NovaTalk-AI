@@ -19,7 +19,8 @@ export const SocketProvider = ({ children }) => {
     if (!token) return;
 
     // Connect socket with auth
-    socketRef.current = io(window.location.origin, {
+    const socketUrl = import.meta.env.VITE_API_URL || window.location.origin;
+    socketRef.current = io(socketUrl, {
       auth: { token },
       transports: ['websocket', 'polling'],
     });
