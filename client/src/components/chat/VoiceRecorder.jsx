@@ -93,7 +93,8 @@ const VoiceRecorder = ({ onSend, onTranscribe, onCancel }) => {
       formData.append('audio', audioBlob, 'audio.webm');
       
       const token = localStorage.getItem('nexus_token');
-      const response = await fetch('/api/ai/transcribe', {
+      const apiUrl = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/ai/transcribe` : '/api/ai/transcribe';
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,

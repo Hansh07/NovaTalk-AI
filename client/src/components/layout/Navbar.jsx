@@ -35,7 +35,8 @@ const Navbar = () => {
       formData.append('file', file);
       const token = localStorage.getItem('nexus_token');
       
-      const res = await fetch('/api/upload', {
+      const apiUrl = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/upload` : '/api/upload';
+      const res = await fetch(apiUrl, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formData
