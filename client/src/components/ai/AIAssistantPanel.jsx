@@ -41,7 +41,7 @@ const AIAssistantPanel = ({ onClose }) => {
     try {
       if (action === 'summarize') {
         setMessages(prev => [...prev, { role: 'user', content: 'Summarize the current chat context.' }]);
-        const context = chatMessages.slice(-20).map(m => `${m.sender.name}: ${m.content}`).join('\n');
+        const context = chatMessages.slice(-20).map(m => `${m.sender?.name || m.sender || 'User'}: ${m.content || ''}`).join('\n');
         
         if (!context) {
           setMessages(prev => [...prev, { role: 'assistant', content: 'There are no recent messages to summarize.' }]);

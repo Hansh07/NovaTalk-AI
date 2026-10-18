@@ -26,3 +26,6 @@ error.log
 .idea/
 .DS_Store
 Thumbs.db
+
+# User Uploads
+server/uploads/

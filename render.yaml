@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: novatalk-api
+    env: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node server.js
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GROQ_MODEL
+        value: qwen/qwen3.8-27b
+      - key: CLIENT_URL
+        value: https://nova-talk-ai.vercel.app

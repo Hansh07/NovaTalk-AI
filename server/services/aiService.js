@@ -7,24 +7,25 @@ class AIService {
     // We'll use dynamic import or graceful fallback if OpenAI isn't configured
     this.openai = null;
     this.isConfigured = false;
+    this.model = process.env.GROQ_MODEL || 'qwen/qwen3.8-27b';
     this._init();
   }
 
-  async _init() {
+  _init() {
     try {
       if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'sk-demo-key') {
-        const { default: OpenAI } = await import('openai');
+        const OpenAI = require('openai');
         this.openai = new OpenAI({ 
           apiKey: process.env.OPENAI_API_KEY,
           baseURL: 'https://api.groq.com/openai/v1'
         });
         this.isConfigured = true;
-        console.log('✅ Groq AI service initialized');
+        console.log(`✅ Groq AI service initialized (${this.model})`);
       } else {
         console.log('⚠️  OpenAI not configured — using mock AI responses');
       }
     } catch (e) {
-      console.log('⚠️  OpenAI init failed — using mock AI responses');
+      console.log('⚠️  OpenAI init failed — using mock AI responses:', e.message);
     }
   }
 
@@ -33,7 +34,7 @@ class AIService {
     if (!this.isConfigured) return this._mockChat(messages);
     try {
       const response = await this.openai.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
+        model: this.model,
         messages: [{ role: 'system', content: systemPrompt }, ...messages],
         max_tokens: 1000,
       });
@@ -51,7 +52,7 @@ class AIService {
     }
     try {
       const response = await this.openai.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
+        model: this.model,
         messages: [{
           role: 'system',
           content: 'Generate 3 short smart reply suggestions for the conversation. Return as JSON array of strings.',
@@ -72,7 +73,7 @@ class AIService {
     if (!this.isConfigured) return 'This conversation covered several important topics including project planning and team coordination.';
     try {
       const response = await this.openai.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
+        model: this.model,
         messages: [{
           role: 'system',
           content: 'Summarize this conversation in 2-3 sentences.',
@@ -94,7 +95,7 @@ class AIService {
     if (!this.isConfigured) return { corrected: text, suggestions: ['No suggestions available in demo mode.'] };
     try {
       const response = await this.openai.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
+        model: this.model,
         messages: [{
           role: 'system',
           content: 'Correct the grammar. Return JSON: {"corrected": "...", "suggestions": ["..."]}',
@@ -112,7 +113,7 @@ class AIService {
     if (!this.isConfigured) return { improved: text, tone: targetTone };
     try {
       const response = await this.openai.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
+        model: this.model,
         messages: [{
           role: 'system',
           content: `Rewrite the text in a ${targetTone} tone. Return JSON: {"improved": "...", "tone": "..."}`,
@@ -130,7 +131,7 @@ class AIService {
     if (!this.isConfigured) return { translated: text, detectedLang: 'en', targetLang };
     try {
       const response = await this.openai.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
+        model: this.model,
         messages: [{
           role: 'system',
           content: `Detect the language and translate to ${targetLang}. Return JSON: {"translated": "...", "detectedLang": "...", "targetLang": "..."}`,
@@ -152,7 +153,7 @@ class AIService {
     }
     try {
       const response = await this.openai.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
+        model: this.model,
         messages: [{
           role: 'system',
           content: 'Analyze sentiment. Return JSON: {"label": "positive|negative|neutral|mixed", "score": 0.0-1.0}',
@@ -171,7 +172,7 @@ class AIService {
     if (!this.isConfigured) return { isToxic: false, score: 0, categories: [] };
     try {
       const response = await this.openai.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
+        model: this.model,
         messages: [{
           role: 'system',
           content: 'Detect toxicity. Return JSON: {"isToxic": bool, "score": 0.0-1.0, "categories": []}',
@@ -190,7 +191,7 @@ class AIService {
     if (!this.isConfigured) return 'This code appears to define a function that processes data. (Demo mode — connect OpenAI for real explanations.)';
     try {
       const response = await this.openai.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
+        model: this.model,
         messages: [{
           role: 'system',
           content: 'Explain this code snippet clearly and concisely.',
