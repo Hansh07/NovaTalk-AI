@@ -4,17 +4,50 @@ const multer = require('multer');
 const { protect } = require('../middleware/auth');
 const fs = require('fs');
 const path = require('path');
+const cloudinary = require('../config/cloudinary');
 
 const upload = multer({ dest: 'uploads/' });
 
-// POST /api/upload - Upload a file locally
+// POST /api/upload - Upload a file (Cloudinary if configured, otherwise local storage)
 router.post('/', protect, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    // Determine resource type based on mime type
+    const isCloudinaryConfigured = 
+      process.env.CLOUDINARY_CLOUD_NAME && 
+      process.env.CLOUDINARY_CLOUD_NAME !== 'demo' &&
+      process.env.CLOUDINARY_API_KEY &&
+      process.env.CLOUDINARY_API_KEY !== 'demo' &&
+      process.env.CLOUDINARY_API_SECRET &&
+      process.env.CLOUDINARY_API_SECRET !== 'demo';
+
+    if (isCloudinaryConfigured) {
+      try {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: 'novatalk',
+          resource_type: 'auto',
+        });
+
+        // Clean up temp local file
+        if (fs.existsSync(req.file.path)) {
+          fs.unlinkSync(req.file.path);
+        }
+
+        return res.json({
+          url: result.secure_url,
+          publicId: result.public_id,
+          format: result.format,
+          resourceType: result.resource_type,
+        });
+      } catch (cloudErr) {
+        console.error('Cloudinary upload failed, falling back to local storage:', cloudErr.message);
+        // fall through to local storage below
+      }
+    }
+
+    // Local storage fallback
     const resourceType = req.file.mimetype.startsWith('video/') || req.file.mimetype.startsWith('audio/') 
       ? 'video' 
       : (req.file.mimetype.startsWith('image/') ? 'image' : 'raw');
@@ -38,7 +71,7 @@ router.post('/', protect, upload.single('file'), async (req, res) => {
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
-    console.error('Local upload error:', error);
+    console.error('Upload error:', error);
     res.status(500).json({ message: 'Error uploading file', error: error.message });
   }
 });
