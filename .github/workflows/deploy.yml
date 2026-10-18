@@ -46,7 +46,7 @@ jobs:
   deploy-frontend:
     name: Deploy to Vercel
     needs: test-and-lint
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && secrets.VERCEL_TOKEN != ''
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
