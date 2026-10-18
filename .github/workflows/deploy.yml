@@ -28,7 +28,7 @@ jobs:
 
       - name: Install Client Dependencies
         working-directory: ./client
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build Frontend
         working-directory: ./client
