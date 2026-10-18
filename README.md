@@ -1,6 +1,9 @@
 # NovaTalk-AI 🚀
 
 NovaTalk-AI is a modern, real-time, AI-powered chat application. It provides seamless communication with integrated artificial intelligence features, built using the latest web technologies.
+<img width="1913" height="1020" alt="image" src="https://github.com/user-attachments/assets/3aaf8467-5b0e-4a8c-ba23-0c65fc69bac3" />
+<img width="1917" height="937" alt="image" src="https://github.com/user-attachments/assets/fe5c2c54-a435-4dce-a916-ee24546835e9" />
+
 
 ## ✨ Features
 - **Real-Time Messaging**: Instant communication powered by Socket.io.
